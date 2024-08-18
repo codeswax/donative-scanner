@@ -6,12 +6,12 @@ app.use(express.json());
 // routes files
 const donativeRoute = require("./routes/donativeRoute");
 const reportsRoute = require("./routes/reportsRoute");
-
+const campaignRoute = require('./routes/campaignRoute');
 
 // routes used
 app.use("/donative", donativeRoute);
 app.use("/report", reportsRoute);
-
+app.use('/campaign', campaignRoute);
 
 app.get("/", (req, res)=>{
     res.send("Ejemplo");
