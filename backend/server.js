@@ -1,17 +1,20 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 
+app.use(express.json());
+
 // routes files
-const donativeRoute = require('./routes/donativeRoute');
-const reportsRoute = require('./routes/reportsRoute');
+const donativeRoute = require("./routes/donativeRoute");
+const reportsRoute = require("./routes/reportsRoute");
+
 
 // routes used
-app.use('/donative', donativeRoute);
-app.use('/report', reportsRoute);
+app.use("/donative", donativeRoute);
+app.use("/report", reportsRoute);
 
 
-app.get('/', (req, res)=>{
-    res.send('Ejemplo');
+app.get("/", (req, res)=>{
+    res.send("Ejemplo");
 });
 
 const port = process.env.PORT || 3000;

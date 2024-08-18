@@ -31,4 +31,17 @@ router.get("/:id", async (req, res) => {
     }
 });
 
+// create a report with donatives - Kevin Valle
+router.post("/addReport/:id", async (req, res) => {
+    try {
+        const report = req.body;
+        const reportId = req.params.id
+        const docRef = db.collection("report").doc(reportId);
+        await docRef.set(report);
+        res.status(201).json({ message: "Report created successfully", id: docRef.id });
+    } catch (error) {
+        res.status(500).send("Cannot access data: " + error.message);
+    }
+});
+
 module.exports = router;
