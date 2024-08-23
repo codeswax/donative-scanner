@@ -1,4 +1,5 @@
 import 'package:donative_scanner/screens/home_page.dart';
+import 'package:donative_scanner/screens/report_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:donative_scanner/screens/start_page.dart';
 // import 'package:saia_mobile_app/models/report_data.dart';
@@ -33,7 +34,8 @@ class RouteManagement {
   static Map<String, Widget Function(BuildContext)> getRoutes() {
     return {
       '/': (context) => const StartPage(),
-      '/homePage': (context) => const HomePage()
+      '/homePage': (context) => const HomePage(),
+      '/reportPreview': (context) => const ReportPreview()
     };
   }
 }
