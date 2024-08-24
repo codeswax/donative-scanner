@@ -1,3 +1,4 @@
+import 'package:donative_scanner/screens/categories_page.dart';
 import 'package:donative_scanner/screens/home_page.dart';
 import 'package:donative_scanner/screens/report_preview.dart';
 import 'package:flutter/material.dart';
