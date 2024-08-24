@@ -11,10 +11,10 @@ class ReportPreview extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.teal,
-        title: Text(
+        backgroundColor: Colors.teal[200],
+        title: const Text(
           'Vista Previa',
-          style: Theme.of(context).textTheme.titleMedium,
+          style: TextStyle(color: Colors.teal),
         ),
       ),
       body: PdfPreview(
