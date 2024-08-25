@@ -33,10 +33,7 @@ class _ScreenSelectorState extends State<ScreenSelector> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Agregar pantallas',
-      style: optionStyle,
-    ),
+    CampaignPage(),
     ScanQrPage(),
     ReportsPage(),
   ];
