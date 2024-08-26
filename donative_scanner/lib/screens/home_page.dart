@@ -1,3 +1,5 @@
+import 'package:donative_scanner/screens/campaign_page.dart';
+import 'package:donative_scanner/screens/categories_page.dart';
 import 'package:donative_scanner/utils/color_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:donative_scanner/screens/qr_scanner_page.dart';
@@ -26,6 +28,7 @@ class ScreenSelector extends StatefulWidget {
 class _ScreenSelectorState extends State<ScreenSelector> {
   static const List<String> _titles = <String>[
     'Campaña',
+    'Categorías',
     'Escáner',
     'Reportes',
   ];
@@ -34,6 +37,7 @@ class _ScreenSelectorState extends State<ScreenSelector> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     CampaignPage(),
+    CategoriesPage(),
     ScanQrPage(),
     ReportsPage(),
   ];
@@ -65,6 +69,11 @@ class _ScreenSelectorState extends State<ScreenSelector> {
           BottomNavigationBarItem(
             icon: Icon(Icons.campaign),
             label: 'Campaña',
+          ),
+          //Boton de navegacion a categoria (temporal)
+          BottomNavigationBarItem(
+            icon: Icon(Icons.category),
+            label: 'Categoría',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.qr_code_scanner),

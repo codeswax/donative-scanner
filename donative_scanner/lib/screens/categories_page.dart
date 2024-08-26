@@ -8,9 +8,9 @@ class Category {
 }
 
 final List<Category> categories = [
-  Category(name: 'Medicina', items: ['Laptop', 'Smartphone', 'Camera']),
-  Category(name: 'Ropa', items: ['Shirt', 'Pants', 'Jacket']),
-  Category(name: 'Comida', items: ['Apples', 'Bananas', 'Carrots', 'Lata de atún', 'Lata de sardina']),
+  Category(name: 'Medicina', items: ['Vitaminas', 'Suplementos', 'Analgésicos']),
+  Category(name: 'Ropa', items: ['Camisa', 'Pantalones', 'Abrigos']),
+  Category(name: 'Comida', items: ['Manzana', 'Guineos', 'Zanahorias', 'Lata de atún', 'Lata de sardina']),
 ];
 
 class CategoriesPage extends StatefulWidget {
@@ -80,7 +80,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
                 size: 25.0,
               ),
               onTap: () {
-                // Lógica para eliminar la categoría
+                // TODO: Botón eliminar
               },
             ),
           ],
@@ -90,7 +90,6 @@ class _CategoriesPageState extends State<CategoriesPage> {
   }
 
   void goToCategoryItems(String category) {
-    // Navegar a una nueva página que muestre los ítems de la categoría
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -107,22 +106,24 @@ class CategoryItemsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Encuentra la categoría seleccionada
     final selectedCategory = categories.firstWhere((c) => c.name == category);
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Items en $category'),
       ),
+      backgroundColor: Colors.teal,
       body: ListView.builder(
         itemCount: selectedCategory.items.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(selectedCategory.items[index]),
+            title: Text(
+              selectedCategory.items[index],
+              style: const TextStyle(color: Colors.white), 
+            ),
           );
         },
       ),
     );
   }
 }
-
