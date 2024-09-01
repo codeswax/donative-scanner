@@ -24,7 +24,7 @@ class _ScanQrPageState extends State<ScanQrPage> {
           alignment: WrapAlignment.center,
           runSpacing: 20,
           children: [
-            const QRScanner(),
+            //const QRScanner(),
             Row(
               children: [
                 Icon(
@@ -35,10 +35,10 @@ class _ScanQrPageState extends State<ScanQrPage> {
                 const SizedBox(width: 30),
                 Expanded(
                   child: Text(
-                    "Mantén fijo el celular para hasta que se capture correctamente.",
+                    "Mantén fijo el celular para hasta que se capture el código correctamente.",
                     overflow: TextOverflow.fade,
                     maxLines: 2,
-                    style: Theme.of(context).textTheme.titleSmall,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
               ],

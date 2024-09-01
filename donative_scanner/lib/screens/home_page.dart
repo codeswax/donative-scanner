@@ -1,10 +1,8 @@
-import 'package:donative_scanner/screens/campaign_page.dart';
-import 'package:donative_scanner/screens/categories_page.dart';
+import 'package:donative_scanner/screens/donatives_history_page.dart';
 import 'package:donative_scanner/utils/color_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:donative_scanner/screens/qr_scanner_page.dart';
 import 'package:donative_scanner/screens/reports_page.dart';
-import 'package:donative_scanner/utils/color_constants.dart';
 
 void main() => runApp(const HomePage());
 
@@ -44,7 +42,9 @@ class _ScreenSelectorState extends State<ScreenSelector> {
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                goToDonativesHistoryPage();
+              },
               child: const Icon(
                 Icons.history,
                 size: 26.0,
@@ -100,6 +100,13 @@ class _ScreenSelectorState extends State<ScreenSelector> {
         selectedItemColor: teal,
         onTap: _onItemTapped,
       ),
+    );
+  }
+
+  void goToDonativesHistoryPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const DonativesHistoryPage()),
     );
   }
 }

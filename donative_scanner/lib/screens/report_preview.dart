@@ -1,6 +1,7 @@
 import 'package:donative_scanner/models/report.dart';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
+import '../utils/color_constants.dart';
 import '../widgets/pdf_format.dart';
 
 class ReportPreview extends StatelessWidget {
@@ -13,10 +14,11 @@ class ReportPreview extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.teal[200],
+        backgroundColor: lightTeal,
         title: const Text(
           'Vista Previa',
-          style: TextStyle(color: Colors.teal),
+          style:
+              TextStyle(color: teal, fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ),
       body: PdfPreview(

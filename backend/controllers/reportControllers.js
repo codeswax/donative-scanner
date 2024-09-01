@@ -1,5 +1,4 @@
 const { db } = require('../firebase.js');
-const Report = require('../models/reportModel.js');
 const {
     collection,
     doc,
@@ -30,21 +29,36 @@ const getReports = async (req, res, next) => {
         if (reports.empty) {
             res.status(400).send('No Reports found. Create a new one to continue.');
         } else {
-            reports.forEach((doc) => {
-                const report = new Report(
-                    doc.id,
-                    doc.data().reportDate,
-                    doc.data().donative,
-                );
-                reportArray.push(report);
-            });
+            for (const doc of reports.docs) {
+                const donativeRefs = doc.data().donative;
 
+                const donativesData = await Promise.all(donativeRefs.map(async (donativeRef) => {
+                    const donativeDoc = await getDoc(donativeRef);
+                    if (donativeDoc.exists()) {
+                        const donativeData = donativeDoc.data();
+                        if (donativeData.category) {
+                            const categoryDoc = await getDoc(donativeData.category);
+                            if (categoryDoc.exists()) {
+                                donativeData.category = categoryDoc.data();
+                            }
+                        }
+                        return donativeData;
+                    }
+                }));
+                const report = {
+                    id: doc.id,
+                    reportDate: doc.data().reportDate,
+                    donatives: donativesData
+                };             
+                reportArray.push(report);
+            }
             res.status(200).send(reportArray);
         }
     } catch (error) {
         res.status(400).send(error.message);
     }
 };
+
 
 // get specific report
 const getReport = async (req, res, next) => {

@@ -1,5 +1,4 @@
 const { db } = require('../firebase.js');
-const Donative = require('../models/donativeModel.js');
 const {
     collection,
     doc,
@@ -38,12 +37,13 @@ const getDonatives = async (req, res, next) => {
                 } else {
                     res.status(400).send('Unknown category. Try entering it first.');
                 }
-                const donative = new Donative(
-                    doc.id,
-                    doc.data().brand,
-                    category.data(),
-                    doc.data().description
-                );
+                const donative = {
+                    id: doc.id,
+                    brand: doc.data().brand,
+                    category: category.data(),
+                    description: doc.data().description,
+                    quantity: doc.data().quantity
+                };
                 donativeArray.push(donative);
             }
             res.status(200).send(donativeArray);

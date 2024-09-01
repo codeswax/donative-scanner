@@ -9,7 +9,6 @@ class ReportService {
     List<Report> reports = [];
     try {
       final res = await http.get(Uri.parse(baseUrl));
-
       if (res.statusCode == 200) {
         var data = jsonDecode(res.body);
         data.forEach((value) => {
@@ -17,7 +16,7 @@ class ReportService {
                 Report(
                   value['id'],
                   value['reportDate'],
-                  value['donative'],
+                  [],
                 ),
               )
             });

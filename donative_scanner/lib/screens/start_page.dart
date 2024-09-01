@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:donative_scanner/widgets/credentials.dart';
 
 class StartPage extends StatelessWidget {
   const StartPage({super.key});
@@ -12,18 +11,36 @@ class StartPage extends StatelessWidget {
         resizeToAvoidBottomInset: false,
         body: Container(
           margin: const EdgeInsets.only(left: 25.0, right: 25.0),
-          child: const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Image(
+              const Image(
                 image: AssetImage('assets/images/image.png'),
                 fit: BoxFit.cover,
               ),
-              UserCredentialsWidget(),
+              TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.teal,
+                  padding: const EdgeInsets.all(20.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25.0),
+                  ),
+                ),
+                onPressed: () {
+                  goToHomePage(context);
+                },
+                child: Text('Empezar',
+                    style: Theme.of(context).textTheme.labelLarge),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void goToHomePage(context) {
+    if (!context.mounted) return;
+    Navigator.pushReplacementNamed(context, '/homePage');
   }
 }
