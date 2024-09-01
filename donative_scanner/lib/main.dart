@@ -2,20 +2,14 @@ import 'package:donative_scanner/screens/home_page.dart';
 import 'package:donative_scanner/screens/report_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:donative_scanner/screens/start_page.dart';
-// import 'package:saia_mobile_app/models/report_data.dart';
-// import 'package:saia_mobile_app/screens/enter_receipt_page.dart';
-// import 'package:saia_mobile_app/screens/finish_page.dart';
-// import 'package:saia_mobile_app/screens/preview_page.dart';
-// import 'package:saia_mobile_app/screens/scan_qr_page.dart';
-// import 'package:saia_mobile_app/screens/start_page.dart';
 import 'package:donative_scanner/utils/color_constants.dart';
-// import 'package:saia_mobile_app/widgets/available_receipts_container.dart';
+import 'models/report.dart';
 
 void main() {
   runApp(const MainApp());
 }
 
-// DataStorage dataStorage = DataStorage();
+Report report = Report("", "", []);
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
@@ -23,6 +17,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeManagement.getTheme(),
       initialRoute: '/',
       routes: RouteManagement.getRoutes(),
@@ -35,7 +30,7 @@ class RouteManagement {
     return {
       '/': (context) => const StartPage(),
       '/homePage': (context) => const HomePage(),
-      '/reportPreview': (context) => const ReportPreview()
+      '/reportPreview': (context) => ReportPreview(report: report)
     };
   }
 }

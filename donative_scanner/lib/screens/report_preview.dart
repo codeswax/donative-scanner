@@ -1,9 +1,11 @@
+import 'package:donative_scanner/models/report.dart';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 import '../widgets/pdf_format.dart';
 
 class ReportPreview extends StatelessWidget {
-  const ReportPreview({Key? key}) : super(key: key);
+  final Report report;
+  const ReportPreview({Key? key, required this.report}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class ReportPreview extends StatelessWidget {
         ),
       ),
       body: PdfPreview(
-        build: (context) => makePdf(),
+        build: (context) => makePdf(report),
       ),
     );
   }

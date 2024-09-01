@@ -1,4 +1,5 @@
 import 'package:donative_scanner/screens/report_preview.dart';
+import 'package:donative_scanner/utils/color_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:donative_scanner/models/report.dart';
 import 'package:donative_scanner/services/report_service.dart';
@@ -11,64 +12,38 @@ class ReportsPage extends StatefulWidget {
 }
 
 class _ReportsPageState extends State<ReportsPage> {
-  //late Future<List<dynamic>> _futureReports;
-  List<dynamic> reports = [
-    {
-      "Campaña": "Prueba",
-      "ID": 1,
-      "Fecha": "12/10/2024",
-      "Donativos": [1, 2]
-    },
-    {
-      "Campaña": "Gotitas del Saber",
-      "ID": 1,
-      "Fecha": "12/10/2024",
-      "Donativos": [1, 2]
-    },
-    {
-      "Campaña": "Ballenita",
-      "ID": 1,
-      "Fecha": "12/10/2024",
-      "Donativos": [1, 2, 5, 9]
-    },
-    {
-      "Campaña": "Teleton",
-      "ID": 1,
-      "Fecha": "12/10/2024",
-      "Donativos": [1, 2, 3]
-    },
-    {
-      "Campaña": "Test",
-      "ID": 1,
-      "Fecha": "12/10/2024",
-      "Donativos": [1]
-    },
-  ];
   @override
   void initState() {
     super.initState();
-    //_futureReports = ReportService().fetchReports();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(left: 25.0, right: 25.0),
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: reports.length,
-        itemBuilder: (context, index) {
-          return reportContainer(
-              reports[index]["Campaña"],
-              reports[index]["ID"],
-              reports[index]["Fecha"],
-              reports[index]["Donativos"].length);
-        },
-      ),
+    return FutureBuilder(
+      future: ReportService.getReports(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(
+            child: CircularProgressIndicator(color: Colors.white),
+          );
+        } else {
+          List<Report> data = snapshot.data;
+          return Container(
+            margin: const EdgeInsets.only(left: 25.0, right: 25.0),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                return reportContainer(data[index]);
+              },
+            ),
+          );
+        }
+      },
     );
   }
 
-  Widget reportContainer(String campaign, int id, String date, int quantity) {
+  Widget reportContainer(Report report) {
     return Container(
       width: 310,
       height: 110,
@@ -76,13 +51,14 @@ class _ReportsPageState extends State<ReportsPage> {
       padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         color: Colors.teal[200],
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           const Icon(
             Icons.description_outlined,
-            color: Colors.teal,
+            color: teal,
             size: 50.0,
           ),
           Column(
@@ -90,19 +66,19 @@ class _ReportsPageState extends State<ReportsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Campaña: $campaign',
+                'Campaña: ${report.id}',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               Text(
-                'ID: $id',
+                'ID: ${report.id}',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               Text(
-                'Fecha de Reporte: $date',
+                'Fecha de Reporte: ${report.reportDate}',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               Text(
-                'Cantidad de donativos: $quantity',
+                'Cantidad de donativos: ${report.donatives.length}',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ],
@@ -110,20 +86,23 @@ class _ReportsPageState extends State<ReportsPage> {
           Row(
             children: [
               GestureDetector(
-                child: const Icon(
+                child: Icon(
                   Icons.delete_forever,
-                  color: Colors.red,
+                  color: red,
                   size: 25.0,
                 ),
+                onTap: () {
+                  showDeletionDialog(report);
+                },
               ),
               GestureDetector(
                   child: const Icon(
                     Icons.remove_red_eye_sharp,
-                    color: Colors.blue,
+                    color: teal,
                     size: 25.0,
                   ),
                   onTap: () {
-                    goToSelectedReport();
+                    goToSelectedReport(report);
                   }),
             ],
           )
@@ -132,12 +111,52 @@ class _ReportsPageState extends State<ReportsPage> {
     );
   }
 
-  void goToSelectedReport() {
+  void goToSelectedReport(Report report) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const ReportPreview(),
+        builder: (context) => ReportPreview(
+          report: report,
+        ),
       ),
     );
+  }
+
+  void showDeletionDialog(Report report) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: Text('Atención',
+                  style: Theme.of(context).textTheme.bodyMedium),
+              content: Text(
+                'El report ${report.id} será eliminado. Esto no se puede deshacer.',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              actions: [
+                TextButton(
+                  style: TextButton.styleFrom(backgroundColor: teal),
+                  onPressed: () {
+                    ReportService.deleteReports(int.parse(report.id));
+                    Navigator.of(context).pop();
+                    setState(() {});
+                  },
+                  child: Text(
+                    'Aceptar',
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(backgroundColor: Colors.red),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'Cancelar',
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
+                ),
+              ]);
+        });
   }
 }

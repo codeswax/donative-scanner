@@ -1,14 +1,6 @@
+import 'package:donative_scanner/utils/color_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:donative_scanner/widgets/scanner.dart';
-// import 'package:saia_mobile_app/main.dart';
-// import 'package:saia_mobile_app/models/api_data.dart';
-// import 'package:saia_mobile_app/models/report_data.dart';
-// import '../core/api_client.dart';
-// import '../exceptions/custom_exceptions.dart';
-// import '../models/receipt_data.dart';
-// import '../services/secure_storage.dart';
-// import '../widgets/available_receipts_container.dart';
-// import '../widgets/qr_scanner.dart';
 
 class ScanQrPage extends StatefulWidget {
   const ScanQrPage({Key? key, Colors? idk}) : super(key: key);
@@ -18,28 +10,9 @@ class ScanQrPage extends StatefulWidget {
 }
 
 class _ScanQrPageState extends State<ScanQrPage> {
-  // late Future<List<Receipt>> receiptsList;
-  // late List<Receipt> assignedReceipts;
-  // final SecureStorageService storageService = SecureStorageService();
-  // final ApiClient apiClient = ApiClient();
-
-  // Future<List<Receipt>> loadReceiptsList() async {
-  //   final userData = await storageService.loadUserData();
-  //   final docData = await storageService.loadDocumentAccessData();
-  //   try {
-  //     return receiptsList = apiClient.consultReceipts(
-  //         userData['token']!.toString(),
-  //         ReceiptQueryData(int.parse(userData['local']!.toString()), 'FAC',
-  //             int.parse(docData['doc']!.toString())));
-  //   } on GeneralException catch (e) {
-  //     throw GeneralException(e.message);
-  //   }
-  // }
-
   @override
   void initState() {
     super.initState();
-    //receiptsList = loadReceiptsList();
   }
 
   @override
@@ -56,7 +29,7 @@ class _ScanQrPageState extends State<ScanQrPage> {
               children: [
                 Icon(
                   Icons.live_help,
-                  color: Colors.teal.shade200,
+                  color: lightTeal,
                   size: 35.0,
                 ),
                 const SizedBox(width: 30),
@@ -75,14 +48,4 @@ class _ScanQrPageState extends State<ScanQrPage> {
       ),
     );
   }
-
-  // void goToAvailableReceiptsPage(List<Receipt> loadedReceipts) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => AvailableReceiptsContainer(
-  //           receipts: loadedReceipts, dataStorage: dataStorage),
-  //     ),
-  //   );
-  // }
 }

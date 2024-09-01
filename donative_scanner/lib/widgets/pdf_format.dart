@@ -2,10 +2,10 @@ import 'dart:typed_data';
 import 'package:pdf/pdf.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/widgets.dart';
+import '../models/report.dart';
 
-//import '../models/report_data.dart';
-
-Future<Uint8List> makePdf() async {
+Future<Uint8List> makePdf(Report report) async {
+  List<dynamic> donatives = report.donatives;
   final pdf = Document();
   final imageLogo = MemoryImage(
       (await rootBundle.load('assets/images/image.png')).buffer.asUint8List());
@@ -19,7 +19,10 @@ Future<Uint8List> makePdf() async {
               children: [
                 Column(
                   children: [
-                    Text("REPORTE", style: Theme.of(context).header0),
+                    Text("REPORTE ${report.id}",
+                        style: Theme.of(context).header0),
+                    Text("Fecha: ${report.reportDate}",
+                        style: Theme.of(context).header1),
                   ],
                   crossAxisAlignment: CrossAxisAlignment.start,
                 ),
@@ -38,7 +41,7 @@ Future<Uint8List> makePdf() async {
                   children: [
                     Padding(
                       child: Text(
-                        'NÚMERO DE SERIE',
+                        'Producto',
                         style: Theme.of(context).header4,
                         textAlign: TextAlign.center,
                       ),
@@ -46,7 +49,7 @@ Future<Uint8List> makePdf() async {
                     ),
                     Padding(
                       child: Text(
-                        'NÚMERO DE SECUENCIA',
+                        'Categoria',
                         style: Theme.of(context).header4,
                         textAlign: TextAlign.center,
                       ),
@@ -54,7 +57,7 @@ Future<Uint8List> makePdf() async {
                     ),
                     Padding(
                       child: Text(
-                        'ID DETALLE',
+                        'Cantidad',
                         style: Theme.of(context).header4,
                         textAlign: TextAlign.center,
                       ),
@@ -62,13 +65,31 @@ Future<Uint8List> makePdf() async {
                     ),
                   ],
                 ),
+                ...report.donatives.map(
+                  (d) => TableRow(
+                    children: [
+                      Expanded(
+                        child: paddedText(d.toString()),
+                        flex: 2,
+                      ),
+                      Expanded(
+                        child: paddedText(d.toString()),
+                        flex: 2,
+                      ),
+                      Expanded(
+                        child: paddedText(d.toString()),
+                        flex: 2,
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
             Container(height: 50),
             Padding(
               padding: const EdgeInsets.all(30),
               child: Text(
-                'PROTOTIPO DE PDF.',
+                "Prototipo de Reporte",
                 style: Theme.of(context).header3.copyWith(
                       fontStyle: FontStyle.italic,
                     ),

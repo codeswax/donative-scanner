@@ -1,7 +1,7 @@
-import 'package:donative_scanner/utils/color_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:donative_scanner/screens/qr_scanner_page.dart';
 import 'package:donative_scanner/screens/reports_page.dart';
+import 'package:donative_scanner/utils/color_constants.dart';
 
 void main() => runApp(const HomePage());
 
@@ -24,22 +24,40 @@ class ScreenSelector extends StatefulWidget {
 }
 
 class _ScreenSelectorState extends State<ScreenSelector> {
+  // changing content
   static const List<String> _titles = <String>[
-    'Campaña',
     'Escáner',
     'Reportes',
   ];
-  int _selectedIndex = 1;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Agregar pantallas',
-      style: optionStyle,
-    ),
     ScanQrPage(),
     ReportsPage(),
   ];
+
+  List<Widget> _getActions(int index) {
+    switch (index) {
+      case 0:
+        return [
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () {},
+              child: const Icon(
+                Icons.history,
+                size: 26.0,
+                color: teal,
+              ),
+            ),
+          ),
+        ];
+      default:
+        return [];
+    }
+  }
+
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: teal);
 
   void _onItemTapped(int index) {
     setState(() {
@@ -55,8 +73,9 @@ class _ScreenSelectorState extends State<ScreenSelector> {
         backgroundColor: lightTeal,
         title: Text(
           _titles[_selectedIndex],
-          style: const TextStyle(color: teal),
+          style: optionStyle,
         ),
+        actions: _getActions(_selectedIndex),
         centerTitle: true,
       ),
       body: Center(
@@ -65,10 +84,6 @@ class _ScreenSelectorState extends State<ScreenSelector> {
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: lightTeal,
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.campaign),
-            label: 'Campaña',
-          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.qr_code_scanner),
             label: 'Escáner',

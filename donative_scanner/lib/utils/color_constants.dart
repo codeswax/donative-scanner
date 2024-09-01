@@ -6,3 +6,4 @@ const Color teal = Colors.teal;
 Color lightTeal = Colors.teal.shade100;
 const Color black = Colors.black;
 const Color white = Colors.white;
+Color red = Colors.red.shade300;

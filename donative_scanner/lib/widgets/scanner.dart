@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-// import 'package:saia_mobile_app/core/api_client.dart';
-// import 'package:saia_mobile_app/exceptions/custom_exceptions.dart';
-// import 'package:saia_mobile_app/services/secure_storage.dart';
-// import 'package:saia_mobile_app/widgets/dialog/dialog_implementation.dart';
-// import 'package:saia_mobile_app/widgets/dialog/dialog_interface.dart';
-// import '../models/api_data.dart';
-// import '../models/battery_data.dart';
-// import '../models/receipt_data.dart';
-// import '../models/report_data.dart';
+
+import '../utils/color_constants.dart';
 
 class QRScanner extends StatefulWidget {
   const QRScanner({
@@ -20,32 +13,12 @@ class QRScanner extends StatefulWidget {
 }
 
 class QRScannerState extends State<QRScanner> {
-  // late Future<List<Receipt>> receiptsList;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
   Barcode? result;
-  // final ApiClient apiClient = ApiClient();
-  // final DialogService dialogService = DialogImplementation();
-  // final ValidationService validationService = ValidationService();
-  // final SecureStorageService secureStorageService = SecureStorageService();
-
-  // Future<List<Receipt>> loadReceiptsList() async {
-  //   final userData = await secureStorageService.loadUserData();
-  //   final docData = await secureStorageService.loadDocumentAccessData();
-  //   try {
-  //     return receiptsList = apiClient.consultReceipts(
-  //         userData['token']!.toString(),
-  //         ReceiptQueryData(int.parse(userData['local']!.toString()), 'FAC',
-  //             int.parse(docData['doc']!.toString())));
-  //   } on GeneralException catch (e) {
-  //     throw GeneralException(e.message);
-  //   }
-  // }
-
   @override
   void initState() {
     super.initState();
-    // receiptsList = loadReceiptsList();
   }
 
   @override
@@ -57,8 +30,8 @@ class QRScannerState extends State<QRScanner> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 240,
-      height: 240,
+      width: 250,
+      height: 250,
       child: ClipRect(
         child: QRView(
           key: qrKey,
@@ -90,20 +63,22 @@ class QRScannerState extends State<QRScanner> {
   }
 
   void showResultDialog(String code) {
+    List<String> stuff = code.split(',');
+    String idk = stuff.join("\n");
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Código QR identificado',
+          title: Text('Donativo identificado',
               style: Theme.of(context).textTheme.bodyMedium),
           content: Text(
-            'S/N: $code',
+            'Datos: $idk',
             style: Theme.of(context).textTheme.bodySmall,
           ),
           actions: [
             TextButton(
-              style: TextButton.styleFrom(backgroundColor: Colors.red),
+              style: TextButton.styleFrom(backgroundColor: red),
               onPressed: () {
                 Navigator.of(context).pop();
                 controller!.resumeCamera();
@@ -112,6 +87,15 @@ class QRScannerState extends State<QRScanner> {
                 'Cancelar',
                 style: Theme.of(context).textTheme.labelMedium,
               ),
+            ),
+            TextButton(
+              style: TextButton.styleFrom(backgroundColor: teal),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                controller!.resumeCamera();
+              },
+              child: Text('Registrar',
+                  style: Theme.of(context).textTheme.labelMedium),
             ),
             // TextButton(
             //   style: TextButton.styleFrom(
