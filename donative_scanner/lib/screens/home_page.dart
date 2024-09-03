@@ -1,3 +1,4 @@
+import 'package:donative_scanner/screens/categories_page.dart';
 import 'package:donative_scanner/screens/donatives_history_page.dart';
 import 'package:donative_scanner/utils/color_constants.dart';
 import 'package:flutter/material.dart';
@@ -26,10 +27,12 @@ class ScreenSelector extends StatefulWidget {
 class _ScreenSelectorState extends State<ScreenSelector> {
   // changing content
   static const List<String> _titles = <String>[
+    'Categorias',
     'Escáner',
     'Historial',
   ];
   static const List<Widget> _widgetOptions = <Widget>[
+    CategoriesPage(),
     ScanQrPage(),
     DonativesHistoryPage(),
   ];
@@ -62,6 +65,10 @@ class _ScreenSelectorState extends State<ScreenSelector> {
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: lightTeal,
         items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.category),
+            label: 'Categorías',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.qr_code_scanner),
             label: 'Escáner',

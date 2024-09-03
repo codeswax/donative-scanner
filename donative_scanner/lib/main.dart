@@ -1,9 +1,7 @@
 import 'package:donative_scanner/screens/home_page.dart';
-import 'package:donative_scanner/screens/report_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:donative_scanner/screens/start_page.dart';
 import 'package:donative_scanner/utils/color_constants.dart';
-import 'models/report.dart';
 
 void main() {
   runApp(const MainApp());
