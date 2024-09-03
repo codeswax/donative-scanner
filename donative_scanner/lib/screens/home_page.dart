@@ -3,6 +3,7 @@ import 'package:donative_scanner/screens/donatives_history_page.dart';
 import 'package:donative_scanner/utils/color_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:donative_scanner/screens/qr_scanner_page.dart';
+import 'package:donative_scanner/screens/campaign_page.dart';
 
 void main() => runApp(const HomePage());
 
@@ -30,11 +31,13 @@ class _ScreenSelectorState extends State<ScreenSelector> {
     'Categorias',
     'Escáner',
     'Historial',
+    'Campañas'
   ];
   static const List<Widget> _widgetOptions = <Widget>[
     CategoriesPage(),
     ScanQrPage(),
     DonativesHistoryPage(),
+    CampaignPage(),
   ];
 
   int _selectedIndex = 0;
@@ -64,18 +67,26 @@ class _ScreenSelectorState extends State<ScreenSelector> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: lightTeal,
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.category),
+            icon: const Icon(Icons.category),
             label: 'Categorías',
+            backgroundColor: lightTeal,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.qr_code_scanner),
+            icon: const Icon(Icons.qr_code_scanner),
             label: 'Escáner',
+            backgroundColor: lightTeal,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.edit_document),
+            icon: const Icon(Icons.edit_document),
             label: 'Historial',
+            backgroundColor: lightTeal,
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.edit_document),
+            label: 'Campañas',
+            backgroundColor: lightTeal,
           ),
         ],
         currentIndex: _selectedIndex,
