@@ -1,46 +1,21 @@
 // routes/campaignRoute
 const express = require("express");
 const { db } = require("../firebase");
+const { createCampaign, getAllCampaigns, getCampaign, updateCampaign, deleteCampaign, } = require("../controllers/campaignController");
 const router = express.Router();
 
-// get all campaign - Luis Quezada
-router.get("/", async (req, res) => {
-    try {
-        const snapshot = await db.collection("campaign").get();
-        const items = snapshot.docs.map((doc) => doc.data());
-        res.status(200).json(items);
-    } catch (error) {
-        res.status(500).send("Cannot access data: " + error.message);
-    }
-});
+router.get('/', getAllCampaigns)
 
-// get specific campaign - Luis Quezada
-router.get("/:id", async (req, res) => {
-    try {
-        const campaignId = req.params.id;
-        const docRef = db.collection("campaign").doc(campaignId);
-        const doc = await docRef.get();
+// get specific campaing
+router.get('/:id', getCampaign)
 
-        if (!doc.exists) {
-            return res.status(404).send("Error displaying the campaign");
-        }
+// create campaing
+router.post('/new', createCampaign);
 
-        res.status(200).json(doc.data());
-    } catch (error) {
-        res.status(500).send("Cannot access data: " + error.message);
-    }
-});
+// update campaing
+router.put('/update/:id', updateCampaign)
 
-// create campaign - Luis Quezada
-router.post("/addCampaign/:id", async (req, res) => {
-    try {
-        const campaign = req.body;
-        const campaignId = req.params.id
-        const docRef = db.collection("campaign").doc(campaignId);
-        await docRef.set(campaign);
-        res.status(201).json({ message: "campaign added successfully", id: docRef.id });
-    } catch (error) {
-        res.status(500).send("Cannot access data: " + error.message);
-    }
-});
+// delete campaing
+router.delete('/delete/:id', deleteCampaign);
+
 module.exports = router;
