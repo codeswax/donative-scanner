@@ -1,3 +1,4 @@
+import 'package:donative_scanner/services/donative_service.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -30,8 +31,8 @@ class QRScannerState extends State<QRScanner> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 250,
-      height: 250,
+      width: 300,
+      height: 300,
       child: ClipRect(
         child: QRView(
           key: qrKey,
@@ -55,7 +56,6 @@ class QRScannerState extends State<QRScanner> {
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         result = scanData;
-        // validateQR(result!.code!);
         controller.pauseCamera();
         showResultDialog(result!.code!);
       });
@@ -63,18 +63,28 @@ class QRScannerState extends State<QRScanner> {
   }
 
   void showResultDialog(String code) {
-    List<String> stuff = code.split(',');
-    String idk = stuff.join("\n");
+    List<String> stuff = code.split('-');
+    String brand = stuff[0];
+    String content = stuff[1];
+    String description = stuff[2];
+    String key = stuff[4];
+    String message = "$description, marca $brand.";
+    var data = {
+      "brand": brand,
+      "category": {"name": key, "additional": content},
+      "description": description,
+      "quantity": 0
+    };
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Donativo identificado',
-              style: Theme.of(context).textTheme.bodyMedium),
+          title: const Text(
+            'Donativo identificado',
+          ),
           content: Text(
-            'Datos: $idk',
-            style: Theme.of(context).textTheme.bodySmall,
+            message,
           ),
           actions: [
             TextButton(
@@ -85,7 +95,7 @@ class QRScannerState extends State<QRScanner> {
               },
               child: Text(
                 'Cancelar',
-                style: Theme.of(context).textTheme.labelMedium,
+                style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
             TextButton(
@@ -93,56 +103,18 @@ class QRScannerState extends State<QRScanner> {
               onPressed: () async {
                 Navigator.of(context).pop();
                 controller!.resumeCamera();
+                DonativeService.postDonatives(data);
               },
-              child: Text('Registrar',
-                  style: Theme.of(context).textTheme.labelMedium),
+              child: Text(
+                'Registrar',
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
             ),
-            // TextButton(
-            //   style: TextButton.styleFrom(
-            //       backgroundColor: Theme.of(context).primaryColor),
-            //   onPressed: () async {
-            //     Navigator.of(context).pop();
-            //     controller!.resumeCamera();
-            //     var completeItemName = "BATERIA $modelName $modelCode";
-            //     var r = await receiptsList;
-            //     var matchingReceipt = r.firstWhere(
-            //       (receipt) => receipt.itemName == completeItemName,
-            //     );
-            //     final userData = await secureStorageService.loadUserData();
-            //     String user = userData['username']!.toString();
-            //     String token = userData['token']!.toString();
-            //     SerialAssignmentData serialAssignmentData =
-            //         SerialAssignmentData(code, user, matchingReceipt);
-            //     try {
-            //       String message =
-            //           await apiClient.assignSerial(token, serialAssignmentData);
-
-            //       DataStorage().assignedReceipts.add(serialAssignmentData);
-
-            //       dialogService.showCompletionDialog(context, message);
-            //     } on GeneralException catch (e) {
-            //       dialogService.showExceptionDialog(context, e.message);
-            //     }
-            //   },
-            //   child: Text('Registrar',
-            //       style: Theme.of(context).textTheme.labelSmall),
-            // ),
           ],
         );
       },
     );
   }
-
-  // void validateQR(String code) {
-  //   try {
-  //     validationService.checkQR(code);
-  //     showResultDialog(code);
-  //   } on InvalidQRException catch (e) {
-  //     dialogService.showExceptionDialog(context, e.message);
-  //   } on GeneralException catch (e) {
-  //     dialogService.showExceptionDialog(context, e.message);
-  //   }
-  // }
 
   @override
   void dispose() {

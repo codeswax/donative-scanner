@@ -7,57 +7,46 @@ const {
     getDocs,
     updateDoc,
     deleteDoc,
+    setDoc,
 } = require('firebase/firestore');
 
 // create report
 const createReport = async (req, res, next) => {
     try {
-        const data = req.body;
-        await addDoc(collection(db, 'report'), data);
+        const { campaign, donatives, reportDate } = req.body;
+
+        if (!campaign || !donatives || !reportDate) {
+            return res.status(400).send('Datos inválidos en la solicitud.');
+        }
+
+        // Crear una referencia al documento de campaña usando el ID proporcionado
+        const campaignRef = doc(db, 'campaign', campaign);
+
+        // Asegúrate de que el documento de campaña existe antes de proceder
+        await setDoc(campaignRef, { name: "Nombre de la Campaña" }, { merge: true });
+
+        // Crear el documento del reporte
+        const reportData = {
+            campaign: campaignRef.id,
+            donatives: donatives,
+            reportDate: reportDate
+        };
+
+        await addDoc(collection(db, 'report'), reportData);
+
         res.status(200).send('Report created successfully.');
     } catch (error) {
-        res.status(400).send(error.message);
-    }
-}
-
-// get reports
-const getReports = async (req, res, next) => {
-    try {
-        const reports = await getDocs(collection(db, 'report'));
-        const reportArray = [];
-
-        if (reports.empty) {
-            res.status(400).send('No Reports found. Create a new one to continue.');
-        } else {
-            for (const doc of reports.docs) {
-                const donativeRefs = doc.data().donative;
-
-                const donativesData = await Promise.all(donativeRefs.map(async (donativeRef) => {
-                    const donativeDoc = await getDoc(donativeRef);
-                    if (donativeDoc.exists()) {
-                        const donativeData = donativeDoc.data();
-                        if (donativeData.category) {
-                            const categoryDoc = await getDoc(donativeData.category);
-                            if (categoryDoc.exists()) {
-                                donativeData.category = categoryDoc.data();
-                            }
-                        }
-                        return donativeData;
-                    }
-                }));
-                const report = {
-                    id: doc.id,
-                    reportDate: doc.data().reportDate,
-                    donatives: donativesData
-                };             
-                reportArray.push(report);
-            }
-            res.status(200).send(reportArray);
-        }
-    } catch (error) {
+        console.error('Error creating report:', error);
         res.status(400).send(error.message);
     }
 };
+
+
+// get reports
+const getReports = async (req, res, next) => {
+    
+};
+
 
 
 // get specific report

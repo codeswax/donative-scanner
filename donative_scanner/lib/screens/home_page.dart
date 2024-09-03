@@ -2,7 +2,6 @@ import 'package:donative_scanner/screens/donatives_history_page.dart';
 import 'package:donative_scanner/utils/color_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:donative_scanner/screens/qr_scanner_page.dart';
-import 'package:donative_scanner/screens/reports_page.dart';
 
 void main() => runApp(const HomePage());
 
@@ -28,35 +27,12 @@ class _ScreenSelectorState extends State<ScreenSelector> {
   // changing content
   static const List<String> _titles = <String>[
     'Escáner',
-    'Reportes',
+    'Historial',
   ];
   static const List<Widget> _widgetOptions = <Widget>[
     ScanQrPage(),
-    ReportsPage(),
+    DonativesHistoryPage(),
   ];
-
-  List<Widget> _getActions(int index) {
-    switch (index) {
-      case 0:
-        return [
-          Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () {
-                goToDonativesHistoryPage();
-              },
-              child: const Icon(
-                Icons.history,
-                size: 26.0,
-                color: teal,
-              ),
-            ),
-          ),
-        ];
-      default:
-        return [];
-    }
-  }
 
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
@@ -78,7 +54,6 @@ class _ScreenSelectorState extends State<ScreenSelector> {
           _titles[_selectedIndex],
           style: optionStyle,
         ),
-        actions: _getActions(_selectedIndex),
         centerTitle: true,
       ),
       body: Center(
@@ -93,20 +68,13 @@ class _ScreenSelectorState extends State<ScreenSelector> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.edit_document),
-            label: 'Reportes',
+            label: 'Historial',
           ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: teal,
         onTap: _onItemTapped,
       ),
-    );
-  }
-
-  void goToDonativesHistoryPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const DonativesHistoryPage()),
     );
   }
 }

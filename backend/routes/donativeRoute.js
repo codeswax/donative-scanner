@@ -1,63 +1,19 @@
 // routes/donativeRoute
 const express = require("express");
 const { db } = require("../firebase");
-const { createDonative, updateDonative, deleteDonative, getDonatives, getDonative } = require("../controllers/donativeControllers");
+const { createDonative, updateDonative, deleteDonative, getDonatives } = require("../controllers/donativeControllers");
 const router = express.Router();
 
-// // get donatives - Kevin Valle
-// router.get("/", async (req, res) => {
-//     try {
-//         const snapshot = await db.collection("donative").get();
-//         const items = snapshot.docs.map(doc => doc.data());
-//         res.status(200).json(items);
-//       } catch (error) {
-//         res.status(500).send("Cannot access data: " + error.message);
-//       }
-// });
-
-// // get specific donative - Kevin Valle
-// router.get("/:id", async (req, res) => {
-//     try {
-//         const donativeId = req.params.id;
-//         const donRef = db.collection("donative").doc(donativeId);
-//         const don = await donRef.get();
-
-//         if (!don.exists) {
-//             return res.status(404).send("Error displaying the donative");
-//         }
-
-//         res.status(200).json(don.data());
-//     } catch (error) {
-//         res.status(500).send("Cannot access data: " + error.message);
-//     }
-// });
-
-// // create donative - Kevin Valle
-// router.post("/addDonative/:id", async (req, res) => {
-//     try {
-//         const donative = req.body;
-//         const donativeId = req.params.id
-//         const docRef = db.collection("donative").doc(donativeId);
-//         await docRef.set(donative);
-//         res.status(201).json({ message: "Donative scanned successfully", id: docRef.id });
-//     } catch (error) {
-//         res.status(500).send("Cannot access data: " + error.message);
-//     }
-// });
-
+// get all donatives - Kevin Valle
 router.get('/', getDonatives)
 
-// get specific donative
-router.get('/:id', getDonative)
-
-// create report
+// create donative - Kevin Valle
 router.post('/new', createDonative);
 
-// update report
+// update donative - Kevin Valle
 router.put('/update/:id', updateDonative)
 
-// delete report
+// delete donative - Kevin Valle
 router.delete('/delete/:id', deleteDonative);
-
 
 module.exports = router;

@@ -23,19 +23,31 @@ class _ReportsPageState extends State<ReportsPage> {
       future: ReportService.getReports(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (!snapshot.hasData) {
-          return const Center(
-            child: CircularProgressIndicator(color: Colors.white),
-          );
+          return const Center(child: CircularProgressIndicator(color: white));
         } else {
           List<Report> data = snapshot.data;
           return Container(
             margin: const EdgeInsets.only(left: 25.0, right: 25.0),
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                return reportContainer(data[index]);
-              },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                MyForm(),
+                SizedBox(height: 16),
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: data.length,
+                  itemBuilder: (context, index) {
+                    if (data.length == 1) {
+                      return const Text(
+                        "No hay reportes creados aún. Aquí aparecerán tus reportes generados.",
+                        style: TextStyle(color: white),
+                      );
+                    } else {
+                      return reportContainer(data[index]);
+                    }
+                  },
+                ),
+              ],
             ),
           );
         }
@@ -158,5 +170,80 @@ class _ReportsPageState extends State<ReportsPage> {
                 ),
               ]);
         });
+  }
+}
+
+class MyForm extends StatefulWidget {
+  const MyForm({super.key});
+
+  @override
+  _MyFormState createState() => _MyFormState();
+}
+
+class _MyFormState extends State<MyForm> {
+  final TextEditingController dateController = TextEditingController();
+  String? selectedOption;
+
+  final List<String> options = ['Option 1', 'Option 2', 'Option 3'];
+
+  @override
+  void dispose() {
+    dateController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: DropdownButtonFormField<String>(
+            value: selectedOption,
+            items: options.map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (newValue) {
+              setState(() {
+                selectedOption = newValue;
+              });
+            },
+            decoration: const InputDecoration(labelText: 'Elegir campaña'),
+          ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: TextField(
+            controller: dateController,
+            readOnly: true,
+            onTap: () async {
+              DateTime? pickedDate = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2101),
+              );
+              if (pickedDate != null) {
+                dateController.text =
+                    "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+              }
+            },
+            decoration: const InputDecoration(
+              labelText: 'Elegir fecha',
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        GestureDetector(
+          onTap: () {},
+          child: const Icon(
+            Icons.add_box,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    );
   }
 }

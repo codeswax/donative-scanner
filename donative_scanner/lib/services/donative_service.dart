@@ -3,22 +3,32 @@ import 'package:http/http.dart' as http;
 import '../models/donative.dart';
 
 class DonativeService {
-  static const String baseUrl = 'http://localhost:5000/donative/';
+  static const String baseUrl = 'http://127.0.0.1:5000/donative/';
+
+  static postDonatives(Map data) async {
+    try {
+      final res = await http.post(
+        Uri.parse("${baseUrl}new"),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode([data]),
+      );
+      if (res.statusCode == 200) {
+      } else {}
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   static getDonatives() async {
     List<Donative> donatives = [];
     try {
       final res = await http.get(Uri.parse(baseUrl));
-
       if (res.statusCode == 200) {
         var data = jsonDecode(res.body);
         data.forEach((value) => {
               donatives.add(
-                Donative(
-                    value['id'],
-                    value['brand'],
-                    value['description'],
-                    /*value['category']*/
-                    value['quantity']),
+                Donative(value['id'], value['brand'], value['description'],
+                    value['quantity'], value['category']),
               )
             });
         return donatives;
@@ -26,22 +36,22 @@ class DonativeService {
         return [];
       }
     } catch (e) {
-      print(e.toString());
+      throw Exception(e);
     }
   }
 
-  static deleteDonatives(int id) async {
+  static deleteDonatives(String id) async {
     try {
-      final res = await http.delete(Uri.parse("${baseUrl}delete/${id}"));
+      final res = await http.delete(Uri.parse("${baseUrl}delete/$id"));
       if (res.statusCode == 200) {
         return "Report deleted successfully";
       }
     } catch (e) {
-      print(e.toString());
+      throw Exception(e);
     }
   }
 
-  static updateDonatives(int? id, int quantity) async {
+  static updateDonatives(String id, int quantity) async {
     try {
       final body = jsonEncode({'quantity': quantity});
       final res = await http.put(Uri.parse("${baseUrl}update/${id}"),
@@ -53,7 +63,7 @@ class DonativeService {
         return "Quantity updated successfully";
       }
     } catch (e) {
-      print(e.toString());
+      throw Exception(e);
     }
   }
 }

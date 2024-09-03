@@ -3,7 +3,8 @@ import 'package:http/http.dart' as http;
 import 'package:donative_scanner/models/report.dart';
 
 class ReportService {
-  static const String baseUrl = 'http://localhost:5000/report/';
+  //localhost
+  static const String baseUrl = 'http://127.0.0.1:5000/report/';
 
   static getReports() async {
     List<Report> reports = [];
@@ -16,7 +17,7 @@ class ReportService {
                 Report(
                   value['id'],
                   value['reportDate'],
-                  [],
+                  value['donatives'],
                 ),
               )
             });

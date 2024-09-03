@@ -8,38 +8,39 @@ class DonativesHistoryPage extends StatefulWidget {
   const DonativesHistoryPage({super.key});
 
   @override
-  State<DonativesHistoryPage> createState() => _DonativesHistoryPage();
+  _DonativesHistoryPage createState() => _DonativesHistoryPage();
 }
 
 class _DonativesHistoryPage extends State<DonativesHistoryPage> {
+  List<Donative> _donatives = [];
+
   @override
   void initState() {
     super.initState();
+    _loadDonatives();
+  }
+
+  void _loadDonatives() async {
+    List<Donative> donatives = await DonativeService.getDonatives();
+    setState(() {
+      _donatives = donatives;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Historial de Escaneo",
-            style: (TextStyle(
-                color: teal, fontWeight: FontWeight.bold, fontSize: 20))),
-        backgroundColor: lightTeal,
-        centerTitle: true,
-      ),
       backgroundColor: teal,
-      body: FutureBuilder(
-        future: DonativeService.getDonatives(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            List<Donative> data = snapshot.data;
-            return ListView.builder(
-              itemCount: data.length,
+      body: _donatives.isEmpty
+          ? const Center(
+              child: CircularProgressIndicator(color: white),
+            )
+          : ListView.builder(
+              itemCount: _donatives.length,
               itemBuilder: (BuildContext context, int index) {
+                String brand = _donatives[index].brand;
+                String description = _donatives[index].description;
+                String quantity = _donatives[index].quantity.toString();
                 return Container(
                   margin: const EdgeInsets.only(left: 25.0, right: 25.0),
                   child: Column(
@@ -50,29 +51,32 @@ class _DonativesHistoryPage extends State<DonativesHistoryPage> {
                           GestureDetector(
                             child: Icon(
                               Icons.delete_forever,
-                              color: red,
+                              color: Colors.red.shade900,
                               size: 25.0,
                             ),
                             onTap: () {
-                              showDeletionDialog(data[index]);
+                              showDeletionDialog(_donatives[index]);
                             },
                           ),
                           GestureDetector(
                             child: Icon(
                               Icons.edit,
-                              color: lightTeal,
+                              color: Colors.teal.shade900,
                               size: 25.0,
                             ),
                             onTap: () {
-                              showEditDialog(data[index]);
+                              showEditDialog(_donatives[index]);
                             },
                           ),
                           Expanded(
                             child: ListTile(
-                              title: Text(data[index].brand),
-                              trailing: Text(
-                                  'Cantidad: ${data[index].quantity.toString()}'),
-                              subtitle: Text(data[index].description),
+                              title: Text(description,
+                                  style:
+                                      Theme.of(context).textTheme.titleLarge),
+                              trailing: Text('Cantidad: $quantity'),
+                              subtitle: Text(brand,
+                                  style:
+                                      Theme.of(context).textTheme.bodyMedium),
                             ),
                           ),
                         ],
@@ -81,49 +85,45 @@ class _DonativesHistoryPage extends State<DonativesHistoryPage> {
                   ),
                 );
               },
-            );
-          }
-        },
-      ),
+            ),
     );
   }
 
   void showDeletionDialog(Donative donative) {
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              title: const Text(
-                'Atención',
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Atención'),
+          content: const Text(
+              'El donativo será eliminado del historial. Esto no se puede deshacer.'),
+          actions: [
+            TextButton(
+              style: TextButton.styleFrom(backgroundColor: teal),
+              onPressed: () async {
+                await DonativeService.deleteDonatives(donative.id);
+                Navigator.of(context).pop();
+                _loadDonatives(); // Recargar la lista de donativos
+              },
+              child: Text(
+                'Aceptar',
+                style: Theme.of(context).textTheme.labelLarge,
               ),
-              content: Text(
-                'El donativo ${donative.id} será eliminado del historial. Esto no se puede deshacer.',
+            ),
+            TextButton(
+              style: TextButton.styleFrom(backgroundColor: Colors.red),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Cancelar',
+                style: Theme.of(context).textTheme.labelLarge,
               ),
-              actions: [
-                TextButton(
-                  style: TextButton.styleFrom(backgroundColor: teal),
-                  onPressed: () {
-                    DonativeService.deleteDonatives(int.parse(donative.id));
-                    Navigator.of(context).pop();
-                    setState(() {});
-                  },
-                  child: Text(
-                    'Aceptar',
-                    style: Theme.of(context).textTheme.labelSmall,
-                  ),
-                ),
-                TextButton(
-                  style: TextButton.styleFrom(backgroundColor: Colors.red),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    'Cancelar',
-                    style: Theme.of(context).textTheme.labelSmall,
-                  ),
-                ),
-              ]);
-        });
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void showEditDialog(Donative donative) {
@@ -138,24 +138,24 @@ class _DonativesHistoryPage extends State<DonativesHistoryPage> {
             controller: controller,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
-              hintText: 'Ingrese la cantidad del donativo (0-100)',
+              hintText: 'Ingrese cantidad (0-100)',
             ),
           ),
           actions: [
             TextButton(
               style: TextButton.styleFrom(backgroundColor: teal),
-              onPressed: () {
+              onPressed: () async {
                 int? donativeAmount = int.tryParse(controller.text);
                 if (donativeAmount != null &&
                     donativeAmount >= 0 &&
                     donativeAmount <= 100) {
+                  await DonativeService.updateDonatives(
+                      donative.id, donativeAmount);
                   Navigator.of(context).pop();
-                  DonativeService.updateDonatives(
-                      int.tryParse(donative.id), donativeAmount);
-                  setState(() {});
+                  _loadDonatives(); // Recargar la lista de donativos
                 } else {
                   Navigator.of(context).pop();
-                  ScaffoldMessenger.of(this.context).showSnackBar(
+                  ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
                           'Por favor, ingrese un valor válido entre 0 y 100.',
@@ -167,7 +167,7 @@ class _DonativesHistoryPage extends State<DonativesHistoryPage> {
               },
               child: Text(
                 'Aceptar',
-                style: Theme.of(context).textTheme.labelMedium,
+                style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
             TextButton(
@@ -177,7 +177,7 @@ class _DonativesHistoryPage extends State<DonativesHistoryPage> {
               },
               child: Text(
                 'Cancelar',
-                style: Theme.of(context).textTheme.labelMedium,
+                style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
           ],

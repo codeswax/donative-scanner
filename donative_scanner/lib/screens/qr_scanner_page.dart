@@ -24,7 +24,7 @@ class _ScanQrPageState extends State<ScanQrPage> {
           alignment: WrapAlignment.center,
           runSpacing: 20,
           children: [
-            //const QRScanner(),
+            const QRScanner(),
             Row(
               children: [
                 Icon(

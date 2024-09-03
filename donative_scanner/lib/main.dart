@@ -1,4 +1,3 @@
-import 'package:donative_scanner/screens/categories_page.dart';
 import 'package:donative_scanner/screens/home_page.dart';
 import 'package:donative_scanner/screens/report_preview.dart';
 import 'package:flutter/material.dart';
@@ -10,15 +9,12 @@ void main() {
   runApp(const MainApp());
 }
 
-Report report = Report("", "", []);
-
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       theme: ThemeManagement.getTheme(),
       initialRoute: '/',
       routes: RouteManagement.getRoutes(),
@@ -31,7 +27,6 @@ class RouteManagement {
     return {
       '/': (context) => const StartPage(),
       '/homePage': (context) => const HomePage(),
-      '/reportPreview': (context) => ReportPreview(report: report)
     };
   }
 }
@@ -48,7 +43,7 @@ class ThemeManagement {
                 fontWeight: FontWeight.w800,
                 letterSpacing: 5),
             titleLarge: TextStyle(
-                fontSize: 30.0,
+                fontSize: 21.0,
                 color: teal,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 5),

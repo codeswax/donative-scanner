@@ -5,7 +5,6 @@ import 'package:pdf/widgets.dart';
 import '../models/report.dart';
 
 Future<Uint8List> makePdf(Report report) async {
-  List<dynamic> donatives = report.donatives;
   final pdf = Document();
   final imageLogo = MemoryImage(
       (await rootBundle.load('assets/images/image.png')).buffer.asUint8List());
@@ -49,7 +48,7 @@ Future<Uint8List> makePdf(Report report) async {
                     ),
                     Padding(
                       child: Text(
-                        'Categoria',
+                        'Información de Categoría',
                         style: Theme.of(context).header4,
                         textAlign: TextAlign.center,
                       ),
@@ -69,15 +68,17 @@ Future<Uint8List> makePdf(Report report) async {
                   (d) => TableRow(
                     children: [
                       Expanded(
-                        child: paddedText(d.toString()),
+                        child:
+                            paddedText('${d['brand']} - ${d['description']}'),
                         flex: 2,
                       ),
                       Expanded(
-                        child: paddedText(d.toString()),
-                        flex: 2,
+                        child: paddedText(
+                            'Tipo: ${d['category']['name']} - Expira en: ${d['category']['expirationDate']}'),
+                        flex: 3,
                       ),
                       Expanded(
-                        child: paddedText(d.toString()),
+                        child: paddedText('${d['quantity']} unidades.'),
                         flex: 2,
                       ),
                     ],
