@@ -154,15 +154,7 @@ class _DonativesHistoryPage extends State<DonativesHistoryPage> {
                   Navigator.of(context).pop();
                   _loadDonatives(); // Recargar la lista de donativos
                 } else {
-                  Navigator.of(context).pop();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                          'Por favor, ingrese un valor válido entre 0 y 100.',
-                          style: Theme.of(context).textTheme.labelSmall),
-                      backgroundColor: lightTeal,
-                    ),
-                  );
+                  showWrongQuantityDialog();
                 }
               },
               child: Text(
@@ -179,6 +171,28 @@ class _DonativesHistoryPage extends State<DonativesHistoryPage> {
                 'Cancelar',
                 style: Theme.of(context).textTheme.labelLarge,
               ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showWrongQuantityDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: const Text('No es una cantidad valida.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: TextButton.styleFrom(backgroundColor: teal),
+              child:
+                  const Text('Aceptar', style: TextStyle(color: Colors.white)),
             ),
           ],
         );
