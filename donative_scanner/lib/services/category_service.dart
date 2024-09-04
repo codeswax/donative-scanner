@@ -37,7 +37,6 @@ class CategoryService {
               categories.add(
                   Category(value['id'], value['name'], value['description'], value['guideProducts']))
             });
-        print(categories);
         return categories;
       } else {
         return [];

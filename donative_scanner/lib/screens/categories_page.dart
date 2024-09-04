@@ -134,7 +134,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
     builder: (BuildContext context) {
       return AlertDialog(
         title: const Text('Crear Nueva Categoría'),
-        content: Container(
+        content: SizedBox(
           width: MediaQuery.of(context).size.width * 0.8, // Ajusta el tamaño del diálogo al 80% del ancho de la pantalla
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -204,8 +204,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Aceptar', style: TextStyle(color: Colors.white)),
               style: TextButton.styleFrom(backgroundColor: teal),
+              child: const Text('Aceptar', style: TextStyle(color: Colors.white)),
             ),
           ],
         );
@@ -242,8 +242,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Aceptar', style: TextStyle(color: Colors.white)),
               style: TextButton.styleFrom(backgroundColor: teal),
+              child: const Text('Aceptar', style: TextStyle(color: Colors.white)),
             ),
           ],
         );
@@ -297,8 +297,8 @@ class _CategoriesPageState extends State<CategoriesPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('Aceptar', style: TextStyle(color: Colors.white)),
               style: TextButton.styleFrom(backgroundColor: teal),
+              child: const Text('Aceptar', style: TextStyle(color: Colors.white)),
             ),
           ],
         );
