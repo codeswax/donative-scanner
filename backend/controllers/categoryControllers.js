@@ -2,7 +2,6 @@ const { db } = require('../firebase.js');
 const {
     collection,
     doc,
-    addDoc,
     getDoc,
     getDocs,
     deleteDoc,
@@ -19,6 +18,7 @@ const getCategory = async (req, res, next) => {
                 id: doc.id,
                 name: doc.data().name,
                 description: doc.data().description,
+                guideProducts: doc.data().guideProducts
             };
             categoryArray.push(category);
         }
@@ -28,17 +28,13 @@ const getCategory = async (req, res, next) => {
     }
 };
 
+
+// create campaign
 const createCategory = async (req, res, next) => {
     try{
-        const { name, description } = req.body;
-
-        // Crear un documento de categoría en la colección 'categories'
-        const categoryRef = await addDoc(collection(db, 'category'), {
-            name: name,
-            description: description
-        });
-
-        res.status(200).send(`Category created successfully with ID: ${categoryRef.id}`);
+        const data = req.body;
+        await setDoc(doc(db, "category", data.id), data.content);
+        res.status(201).send('Created a new category successfully.');
     } catch (error) {
         res.status(400).send(error.message);
     }

@@ -5,21 +5,29 @@ import '../models/category.dart';
 class CategoryService {
   static const String baseUrl = 'http://127.0.0.1:5000/category/';
 
-  static postDonatives(Map data) async {
+  static postCategory(String id, String name, String description, List<dynamic> guiaProductos) async {
     try {
-      final res = await http.post(
-        Uri.parse("${baseUrl}new"),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode([data]),
-      );
+      final res = await http.post(Uri.parse("${baseUrl}new/"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body:jsonEncode({
+          "id": id,
+          "content":{
+            "description": description,
+            "name": name,
+            "guideProducts": guiaProductos,
+          }
+        }));
       if (res.statusCode == 200) {
-      } else {}
+        return "Category create successfully";
+      }
     } catch (e) {
-      throw Exception(e);
+      return e.toString();
     }
   }
 
-  static getCategory() async {
+  static getCategories() async {
     List<Category> categories = [];
     try {
       final res = await http.get(Uri.parse(baseUrl));
@@ -27,8 +35,9 @@ class CategoryService {
         var data = jsonDecode(res.body);
         data.forEach((value) => {
               categories.add(
-                  Category(value['id'], value['name'], value['description']))
+                  Category(value['id'], value['name'], value['description'], value['guideProducts']))
             });
+        print(categories);
         return categories;
       } else {
         return [];
