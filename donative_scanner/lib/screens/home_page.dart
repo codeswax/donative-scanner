@@ -84,7 +84,7 @@ class _ScreenSelectorState extends State<ScreenSelector> {
             backgroundColor: lightTeal,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.edit_document),
+            icon: const Icon(Icons.campaign),
             label: 'Campañas',
             backgroundColor: lightTeal,
           ),
